@@ -70,38 +70,39 @@ public class CalculatorController {
         return splitInputByDelimiter(rawInput);
     }
 
-    public boolean checkMoreSplitInputByDelimiter(String inputToken, List<String> inputTokens) {
+    public List<String> checkMoreSplitInputByDelimiter(String inputToken, List<String> inputTokens) {
         List<String> cutInputToken = splitInputByDelimiter(inputToken);
         if (cutInputToken.size() > 1) {
             inputTokens.addAll(cutInputToken);
-            return true;
+            return inputTokens;
         }
-        return false;
+        return null;
     }
 
-    public void checkDelimiterAndSetInputTokens(String inputToken, List<String> inputTokens) {
+    public List<String> checkDelimiterAndSetInputTokens(String inputToken, List<String> inputTokens) {
         String newCustomDelimiter = checkCustomDelimiters(inputToken);
         customDelimiters.add(newCustomDelimiter);
         String[] nonCustomRange = inputToken.split(Regex.CUSTOM_FORMAT_REGEX.getRegex());
         inputTokens.add(nonCustomRange[1]);
+        return inputTokens;
     }
 
-    public boolean validateInputToken(String inputToken, List<String> inputTokens) {
-        if (!checkMoreSplitInputByDelimiter(inputToken, inputTokens)) {
-            return true;
+    public List<String> validateInputToken(String inputToken, List<String> inputTokens) {
+        List<String> newInputTokens = checkMoreSplitInputByDelimiter(inputToken, inputTokens);
+        if (newInputTokens != null) {
+            return newInputTokens;
         }
         if (!isNumber(inputToken)) {
-            checkDelimiterAndSetInputTokens(inputToken, inputTokens);
-            return true;
+            return checkDelimiterAndSetInputTokens(inputToken, inputTokens);
         }
-        return false;
+        return null;
     }
 
     public int checkAndCalculateInputToken(List<String> inputTokens) {
         int sum = 0;
         for (int i = 0; i < inputTokens.size(); i++) {
             String inputToken = inputTokens.get(i);
-            if (!validateInputToken(inputToken, inputTokens)) {
+            if (validateInputToken(inputToken, inputTokens) == null) {
                 sum += Integer.parseInt(inputToken);
             }
         }
