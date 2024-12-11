@@ -1,8 +1,9 @@
 package com.example.calculatorre.constant;
 
 public enum Regex {
-    NUMBER_REGEX("([1-9])+([0-9])*"),
-    CUSTOM_FORMAT_REGEX("^(//)(.)(\\\\n)");
+    NUMBER_REGEX("(([1-9])+([0-9])*)|([0-9])"),
+    CUSTOM_FORMAT_REGEX("(//)(.)(\\\\n)"),
+    NORMAL_STRING_REGEX("(.)*");
 
     private final String regex;
 
